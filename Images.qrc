@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>eyeOn.png.png</file>
+        <file>Logo.png</file>
+        <file>../../EasyFix..png</file>
+        <file>../../Search-Icons.png</file>
+        <file>../../email.png</file>
+        <file>../../calendrier.png</file>
+        <file>../../bulle-de-chat.png</file>
+        <file>../../commenter.png</file>
+        <file>chat.png</file>
+        <file>envoyer.png</file>
+    </qresource>
+</RCC>

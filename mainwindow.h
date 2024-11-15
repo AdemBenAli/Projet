@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include "maintenance.h"
-
+#include "chatdialog.h"
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -32,8 +32,11 @@ private slots:
     void on_trie_clicked();
 
     void on_recherche_clicked();
+
+    void on_chatButton_clicked();
 private:
     Ui::MainWindow *ui;
     Maintenance m;
+    ChatDialog *chatDialog;
 };
 #endif // MAINWINDOW_H

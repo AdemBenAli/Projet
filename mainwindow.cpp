@@ -6,6 +6,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , chatDialog(nullptr)
 {
     ui->setupUi(this);
     ui->aff->setModel(m.afficher());
@@ -15,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete chatDialog;
 }
 
 void MainWindow::on_supprimer_2_clicked()
@@ -169,4 +171,23 @@ void MainWindow::on_recherche_clicked()
     // Set the sorted model to the table view
     ui->aff->setModel(sortedModel);
 
+}
+void MainWindow::on_chatButton_clicked() {
+    // If chatDialog hasn't been created yet, create it
+    if (!chatDialog) {
+        chatDialog = new ChatDialog(this);
+    }
+
+    // Calculate position just above the chat button
+    QPoint buttonPos = ui->chatButton->mapToGlobal(QPoint(-200, -30));
+    int dialogHeight = chatDialog->size().height();
+    int yPos = buttonPos.y() - dialogHeight;
+    chatDialog->move(buttonPos.x(), yPos);
+
+    // Toggle visibility of chatDialog
+    if (chatDialog->isVisible()) {
+        chatDialog->hide();  // Hide if currently visible
+    } else {
+        chatDialog->show();  // Show if currently hidden
+    }
 }
