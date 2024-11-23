@@ -35,7 +35,7 @@ void ChatDialog::sendMessage() {
 
 QString ChatDialog::getBotResponse(const QString &message) {
     // Simple chatbot logic
-    if (message.toLower().contains("hello")) {
+    if (message.toLower().contains("hello") || message.toLower().contains("hey") || message.toLower().contains("hi")) {
         return "Hello! How can I assist you?";
     } else if (message.toLower().contains("help")) {
         return "I'm here to help! What do you need assistance with?";

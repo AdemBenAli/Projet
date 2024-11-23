@@ -54,6 +54,10 @@ public:
 
     QSqlQueryModel* trie();
 
+    QSqlQueryModel* trie1();
+
+    QSqlQueryModel* trie2();
+
     QSqlQueryModel* recherche(const QString& r);
 };
 

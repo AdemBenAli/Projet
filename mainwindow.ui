@@ -451,7 +451,7 @@ color:black;</string>
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_22">
        <attribute name="title">
@@ -821,7 +821,7 @@ border-radius: 5px;</string>
          </rect>
         </property>
         <property name="text">
-         <string>TRIER</string>
+         <string>TRIER Nom</string>
         </property>
        </widget>
        <widget class="QPushButton" name="recherche">
@@ -845,6 +845,45 @@ border-radius: 5px;</string>
           <width>113</width>
           <height>26</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pdfButton">
+        <property name="geometry">
+         <rect>
+          <x>970</x>
+          <y>580</y>
+          <width>93</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PDF</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="trie1">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>580</y>
+          <width>101</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TRIER NB Pers</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="trie2">
+        <property name="geometry">
+         <rect>
+          <x>720</x>
+          <y>580</y>
+          <width>101</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TRIER NB Jour</string>
         </property>
        </widget>
       </widget>
@@ -1204,46 +1243,11 @@ border-radius: 5px;</string>
        <attribute name="title">
         <string>Diagnostique</string>
        </attribute>
-       <widget class="QWidget" name="widget_7" native="true">
+       <widget class="QLabel" name="label_13">
         <property name="geometry">
          <rect>
-          <x>260</x>
-          <y>20</y>
-          <width>291</width>
-          <height>161</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(216, 216, 216);
-border: 2px solid black;
-border-radius: 5px;</string>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="lineEdit_3">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>70</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 2px solid black;
-border-radius: 5px;</string>
-        </property>
-        <property name="text">
-         <string>         Piece Photo</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_11">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>250</y>
+          <x>30</x>
+          <y>280</y>
           <width>171</width>
           <height>31</height>
          </rect>
@@ -1252,34 +1256,51 @@ border-radius: 5px;</string>
          <string notr="true">background-color:none;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Issue Description :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ai Suggestions :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_4">
+       <widget class="QPushButton" name="btnPiecePhoto">
         <property name="geometry">
          <rect>
-          <x>260</x>
-          <y>250</y>
-          <width>161</width>
-          <height>31</height>
+          <x>60</x>
+          <y>100</y>
+          <width>111</width>
+          <height>41</height>
          </rect>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="styleSheet">
          <string notr="true">border: 2px solid black;
 border-radius: 5px;</string>
         </property>
         <property name="text">
-         <string/>
+         <string>Photo</string>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lineEdit_6">
+       <widget class="QPushButton" name="btnSubmit">
         <property name="geometry">
          <rect>
-          <x>260</x>
-          <y>380</y>
+          <x>560</x>
+          <y>110</y>
+          <width>111</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border: 2px solid black;
+border-radius: 5px;</string>
+        </property>
+        <property name="text">
+         <string>Submit</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="aiSuggestionsTextBox">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>270</y>
           <width>291</width>
           <height>101</height>
          </rect>
@@ -1295,87 +1316,17 @@ border-radius: 5px;</string>
          <string/>
         </property>
        </widget>
-       <widget class="QLabel" name="label_12">
+       <widget class="QLabel" name="photoLabel">
         <property name="geometry">
          <rect>
-          <x>50</x>
-          <y>320</y>
-          <width>171</width>
-          <height>31</height>
+          <x>280</x>
+          <y>50</y>
+          <width>251</width>
+          <height>141</height>
          </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color:none;</string>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Etat :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox_3">
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>320</y>
-          <width>161</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 2px solid black;
-border-radius: 5px;</string>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_13">
-        <property name="geometry">
-         <rect>
-          <x>50</x>
-          <y>380</y>
-          <width>171</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color:none;</string>
-        </property>
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Ai Suggestions :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_10">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>520</y>
-          <width>111</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 2px solid black;
-border-radius: 5px;</string>
-        </property>
-        <property name="text">
-         <string>Reset</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_11">
-        <property name="geometry">
-         <rect>
-          <x>500</x>
-          <y>520</y>
-          <width>111</width>
-          <height>41</height>
-         </rect>
-        </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border: 2px solid black;
-border-radius: 5px;</string>
-        </property>
-        <property name="text">
-         <string>Submit</string>
+         <string/>
         </property>
        </widget>
       </widget>
@@ -1634,7 +1585,7 @@ border-radius: 5px;</string>
       </widget>
       <widget class="QWidget" name="tab_37">
        <attribute name="title">
-        <string>Feedback</string>
+        <string>STATS</string>
        </attribute>
        <widget class="QLabel" name="label_32">
         <property name="geometry">

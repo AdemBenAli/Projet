@@ -1,5 +1,5 @@
-QT       += core gui sql
-
+QT       += core gui sql widgets printsupport network
+QT       += core network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     chatdialog.cpp \
     connection.cpp \
+    mailer.cpp \
     main.cpp \
     maintenance.cpp \
     mainwindow.cpp
@@ -18,6 +19,7 @@ SOURCES += \
 HEADERS += \
     chatdialog.h \
     connection.h \
+    mailer.h \
     maintenance.h \
     mainwindow.h
 

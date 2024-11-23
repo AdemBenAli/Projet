@@ -48,7 +48,7 @@ bool Maintenance::ajouter() {
 // Méthode afficher
 QSqlQueryModel* Maintenance::afficher() {
     QSqlQueryModel *model = new QSqlQueryModel();
-    model->setQuery("SELECT * FROM maintenance");
+    model->setQuery("SELECT id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary FROM maintenance");
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom Client"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("Etat"));
@@ -109,10 +109,40 @@ QSqlQueryModel* Maintenance::trie() {
     model->setHeaderData(8, Qt::Horizontal, QObject::tr("Summary"));
     return model;
 }
+
+QSqlQueryModel* Maintenance::trie1() {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery("SELECT * FROM maintenance ORDER BY nb_personne ASC");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom Client"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Etat"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Departement"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Nb Personne"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Nb Jour"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("State"));
+    model->setHeaderData(8, Qt::Horizontal, QObject::tr("Summary"));
+    return model;
+}
+QSqlQueryModel* Maintenance::trie2() {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    model->setQuery("SELECT * FROM maintenance ORDER BY nb_jour ASC");
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom Client"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Etat"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Departement"));
+    model->setHeaderData(4, Qt::Horizontal, QObject::tr("Date"));
+    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Nb Personne"));
+    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Nb Jour"));
+    model->setHeaderData(7, Qt::Horizontal, QObject::tr("State"));
+    model->setHeaderData(8, Qt::Horizontal, QObject::tr("Summary"));
+    return model;
+}
+
 QSqlQueryModel* Maintenance::recherche(const QString& r) {
     QSqlQueryModel *model = new QSqlQueryModel();
     QSqlQuery query;
-    query.prepare("SELECT * FROM maintenance WHERE nom_client LIKE :nom_client");
+    query.prepare("SELECT id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary FROM maintenance WHERE nom_client LIKE :nom_client");
     query.bindValue(":nom_client", "%" + r + "%");  // Bind the search term with wildcard characters
     query.exec();
     model->setQuery(query);

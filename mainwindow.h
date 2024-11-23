@@ -3,7 +3,9 @@
 #include "maintenance.h"
 #include "chatdialog.h"
 #include <QMainWindow>
-
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include "mailer.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -34,9 +36,26 @@ private slots:
     void on_recherche_clicked();
 
     void on_chatButton_clicked();
+
+    void on_pdfButton_clicked();
+
+    void on_btnPiecePhoto_clicked();
+
+    void on_btnSubmit_clicked();
+
+    void handleAiResponse();
+
+    void on_trie1_clicked();
+
+    void on_trie2_clicked();
+
 private:
     Ui::MainWindow *ui;
     Maintenance m;
     ChatDialog *chatDialog;
+    mailer mailerInstance;
+    QString selectedPhotoPath;
+    QNetworkAccessManager *networkManager;
+
 };
 #endif // MAINWINDOW_H
