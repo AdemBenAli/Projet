@@ -5,6 +5,9 @@
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QSerialPort>
+#include <QTextEdit>
+#include <QPushButton>
 #include "mailer.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -49,6 +52,9 @@ private slots:
 
     void on_trie2_clicked();
 
+    void on_bval_clicked();
+    void on_st_clicked();
+
 private:
     Ui::MainWindow *ui;
     Maintenance m;
@@ -56,6 +62,9 @@ private:
     mailer mailerInstance;
     QString selectedPhotoPath;
     QNetworkAccessManager *networkManager;
+    QTextEdit *valTextEdit;
+    QPushButton *valButton;
+    QSerialPort *serial;
 
 };
 #endif // MAINWINDOW_H

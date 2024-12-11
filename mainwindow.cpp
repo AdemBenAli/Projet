@@ -7,7 +7,9 @@
 #include <QMessageBox>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
-
+#include <QtCharts/QChart>
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
 #include <QFileDialog>
 #include <QPixmap>
 #include <QNetworkRequest>
@@ -16,8 +18,12 @@
 #include <QJsonArray>
 #include <QDebug>
 #include <QFile>
-
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QRegularExpression>
 #include "mailer.h"
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
@@ -26,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->aff->setModel(m.afficher());
+    serial = new QSerialPort(this);
 }
 
 
@@ -63,9 +70,10 @@ void MainWindow::on_ajouter_clicked()
     int nbJour = ui->nb_j->text().toInt();
     QString state = ui->state->text();
     QString summary = ui->summary->toPlainText();
+    float temp = ui->valTextEdit->toPlainText().toFloat();
 
     // Contrôles de validation
-    if (nomClient.isEmpty() || etat.isEmpty() || departement.isEmpty() || state.isEmpty() || summary.isEmpty()) {
+    if (nomClient.isEmpty() || etat.isEmpty() || departement.isEmpty() || state.isEmpty() || summary.isEmpty() ) {
         QMessageBox::warning(this, "Erreur", "Veuillez remplir tous les champs obligatoires.");
         return;
     }
@@ -75,7 +83,7 @@ void MainWindow::on_ajouter_clicked()
         return;
     }
 
-    Maintenance m(nomClient, etat, departement, dateM, nbPersonne, nbJour, state, summary);
+    Maintenance m(nomClient, etat, departement, dateM, nbPersonne, nbJour, state, summary,temp);
 
     if (m.ajouter()) {
         mailerInstance.sendEmail(&m);
@@ -97,6 +105,7 @@ void MainWindow::on_annuler_clicked()
     ui->nb_j->clear();
     ui->state->clear();
     ui->summary->clear();
+    ui->valTextEdit->clear();
 }
 
 
@@ -110,6 +119,7 @@ void MainWindow::on_modifier_2_clicked()
     int nbJour = ui->nb_j_2->text().toInt();
     QString state = ui->state_2->text();
     QString summary = ui->summary_2->toPlainText();
+    float temp = ui->valTextEdit->toPlainText().toFloat();
 
     // Contrôles de validation
     if (id <= 0) {
@@ -127,7 +137,7 @@ void MainWindow::on_modifier_2_clicked()
         return;
     }
 
-    Maintenance m(nomClient, etat, departement, dateM, nbPersonne, nbJour, state, summary);
+    Maintenance m(nomClient, etat, departement, dateM, nbPersonne, nbJour, state, summary,temp);
 
     if (m.verifierExistance(id)) {
         if (m.modifier(id)) {
@@ -343,7 +353,7 @@ void MainWindow::on_btnSubmit_clicked() {
     file.close();
 
     // Construct the request with the correct API endpoint
-    QUrl url("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyCAvPtv3qE_tbtuLAeYb_6d2zrOps3nxYg"); // Replace with the correct endpoint
+    QUrl url("https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=AIzaSyArxf6hX6trMWEssvbPPBzOne9I3sn__K4"); // Replace with the correct endpoint
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -440,4 +450,118 @@ void MainWindow::handleAiResponse()
     }
     reply->deleteLater();
 
+}
+void MainWindow::on_bval_clicked() {
+    qDebug() << "Button clicked!";
+
+    if (!serial->isOpen()) {
+        // Specify the correct COM port
+        serial->setPortName("COM3"); // Replace with the correct port
+        serial->setBaudRate(QSerialPort::Baud9600);
+        serial->setDataBits(QSerialPort::Data8);
+        serial->setParity(QSerialPort::NoParity);
+        serial->setStopBits(QSerialPort::OneStop);
+        serial->setFlowControl(QSerialPort::NoFlowControl);
+
+        if (!serial->open(QIODevice::ReadOnly)) {
+            qDebug() << "Failed to open serial port!" << serial->errorString();
+            QMessageBox::warning(this, "Serial Port Error", "Failed to open serial port! " + serial->errorString());
+            return;
+        }
+    }
+
+    // Wait for data from the serial port
+    if (serial->waitForReadyRead(3000)) {
+        QString data = serial->readAll();
+        qDebug() << "Received data: " << data;
+
+        // Use QRegularExpression to find the first number (temperature)
+        QRegularExpression regExp("([-+]?[0-9]*\\.?[0-9]+)");  // Regex to find a floating-point number
+        QRegularExpressionMatch match = regExp.match(data);  // Find the first match
+
+        if (match.hasMatch()) {
+            QString temperature = match.captured(1);  // Extract the first value (temperature)
+            if (ui->valTextEdit) {  // Check if valTextEdit is valid
+                ui->valTextEdit->setText(temperature);    // Set the temperature value in the text edit
+                qDebug() << "Temperature: " << temperature;
+            } else {
+                qDebug() << "valTextEdit is not valid!";
+                QMessageBox::warning(this, "UI Error", "valTextEdit widget is not initialized.");
+            }
+        } else {
+            qDebug() << "No temperature data found!";
+            QMessageBox::information(this, "No Data", "No temperature data found in the received data.");
+        }
+    } else {
+        qDebug() << "No data received or timeout occurred!";
+        QMessageBox::warning(this, "Serial Timeout", "No data received or timeout occurred!");
+    }
+}
+
+void MainWindow::on_st_clicked() {
+    // Clear the previous chart from the layout
+    QLayoutItem *child;
+    while ((child = ui->chv->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
+    // Create a pie series
+    QPieSeries *series = new QPieSeries();
+
+    // Query the database for counts of each ETAT
+    QSqlQuery query;
+
+    query.exec("SELECT COUNT(*) FROM MAINTENANCE WHERE ETAT = 'Bonne'");
+    int bonneCount = query.next() ? query.value(0).toInt() : 0;
+    qDebug() << "Bonne=" << bonneCount;
+
+    query.exec("SELECT COUNT(*) FROM MAINTENANCE WHERE ETAT = 'Moyenne'");
+    int moyenneCount = query.next() ? query.value(0).toInt() : 0;
+    qDebug() << "Moyenne=" << moyenneCount;
+
+    query.exec("SELECT COUNT(*) FROM MAINTENANCE WHERE ETAT = 'Faible'");
+    int faibleCount = query.next() ? query.value(0).toInt() : 0;
+    qDebug() << "Faible=" << faibleCount;
+
+    int totalCount = bonneCount + moyenneCount + faibleCount;
+    qDebug() << "Total=" << totalCount;
+
+    // Add slices to the series
+    QPieSlice *bonneSlice = series->append("Bonne", bonneCount);
+    QPieSlice *moyenneSlice = series->append("Moyenne", moyenneCount);
+    QPieSlice *faibleSlice = series->append("Faible", faibleCount);
+
+    // Customize slices
+    bonneSlice->setExploded();
+    bonneSlice->setExplodeDistanceFactor(0.2);
+    bonneSlice->setLabelVisible();
+    bonneSlice->setPen(QPen(Qt::darkGreen, 2));
+    bonneSlice->setBrush(Qt::green);
+    bonneSlice->setLabel(QString("Bonne: %1%").arg(static_cast<double>(bonneCount) / totalCount * 100, 0, 'f', 1));
+
+    moyenneSlice->setExploded();
+    moyenneSlice->setExplodeDistanceFactor(0.2);
+    moyenneSlice->setLabelVisible();
+    moyenneSlice->setPen(QPen(Qt::darkYellow, 2));
+    moyenneSlice->setBrush(Qt::yellow);
+    moyenneSlice->setLabel(QString("Moyenne: %1%").arg(static_cast<double>(moyenneCount) / totalCount * 100, 0, 'f', 1));
+
+    faibleSlice->setExploded();
+    faibleSlice->setExplodeDistanceFactor(0.2);
+    faibleSlice->setLabelVisible();
+    faibleSlice->setPen(QPen(Qt::darkRed, 2));
+    faibleSlice->setBrush(Qt::red);
+    faibleSlice->setLabel(QString("Faible: %1%").arg(static_cast<double>(faibleCount) / totalCount * 100, 0, 'f', 1));
+
+    // Create the chart and add the series
+    QChart *chart = new QChart();
+    chart->addSeries(series);
+    chart->setTitle("STATISTICS");
+    chart->setAnimationOptions(QChart::AllAnimations);
+
+    // Create the chart view and set it to the layout
+    QChartView *chv = new QChartView(chart);
+    chv->setRenderHint(QPainter::Antialiasing);
+    ui->chv->addWidget(chv);
 }

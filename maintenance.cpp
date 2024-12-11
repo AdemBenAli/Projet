@@ -5,8 +5,8 @@
 
 Maintenance::Maintenance() {}
 
-Maintenance::Maintenance(QString nomClient, QString etat, QString departement, QDate dateM, int nbPersonne, int nbJour, QString state, QString summary)
-    : nomClient(nomClient), etat(etat), departement(departement), dateM(dateM), nbPersonne(nbPersonne), nbJour(nbJour), state(state), summary(summary) {}
+Maintenance::Maintenance(QString nomClient, QString etat, QString departement, QDate dateM, int nbPersonne, int nbJour, QString state, QString summary,float temp)
+    : nomClient(nomClient), etat(etat), departement(departement), dateM(dateM), nbPersonne(nbPersonne), nbJour(nbJour), state(state), summary(summary),temp(temp) {}
 
 // Getters
 int Maintenance::getId() const { return id; }
@@ -18,6 +18,7 @@ int Maintenance::getNbPersonne() const { return nbPersonne; }
 int Maintenance::getNbJour() const { return nbJour; }
 QString Maintenance::getState() const { return state; }
 QString Maintenance::getSummary() const { return summary; }
+float Maintenance::getTemp() const { return temp; }
 
 // Setters
 void Maintenance::setNomClient(const QString &value) { nomClient = value; }
@@ -28,12 +29,13 @@ void Maintenance::setNbPersonne(int value) { nbPersonne = value; }
 void Maintenance::setNbJour(int value) { nbJour = value; }
 void Maintenance::setState(const QString &value) { state = value; }
 void Maintenance::setSummary(const QString &value) { summary = value; }
+void Maintenance::setTemp(float value) { temp = value; }
 
 // Méthode ajouter
 bool Maintenance::ajouter() {
     QSqlQuery query;
-    query.prepare("INSERT INTO maintenance (id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary) "
-                  "VALUES (maintenance_seq.NEXTVAL, :nom_client, :etat, :departement, :date_m, :nb_personne, :nb_jour, :state, :summary)");
+    query.prepare("INSERT INTO maintenance (id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary,temp) "
+                  "VALUES (maintenance_seq.NEXTVAL, :nom_client, :etat, :departement, :date_m, :nb_personne, :nb_jour, :state, :summary, :temp)");
     query.bindValue(":nom_client", nomClient);
     query.bindValue(":etat", etat);
     query.bindValue(":departement", departement);
@@ -42,13 +44,14 @@ bool Maintenance::ajouter() {
     query.bindValue(":nb_jour", nbJour);
     query.bindValue(":state", state);
     query.bindValue(":summary", summary);
+    query.bindValue(":temp", temp);
     return query.exec();
 }
 
 // Méthode afficher
 QSqlQueryModel* Maintenance::afficher() {
     QSqlQueryModel *model = new QSqlQueryModel();
-    model->setQuery("SELECT id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary FROM maintenance");
+    model->setQuery("SELECT id, nom_client, etat, departement, date_m, nb_personne, nb_jour, state, summary,temp FROM maintenance");
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom Client"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("Etat"));
@@ -58,6 +61,7 @@ QSqlQueryModel* Maintenance::afficher() {
     model->setHeaderData(6, Qt::Horizontal, QObject::tr("Nb Jour"));
     model->setHeaderData(7, Qt::Horizontal, QObject::tr("State"));
     model->setHeaderData(8, Qt::Horizontal, QObject::tr("Summary"));
+    model->setHeaderData(9, Qt::Horizontal, QObject::tr("temp"));
     return model;
 }
 

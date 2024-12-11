@@ -16,11 +16,12 @@ private:
     int nbJour;
     QString state;
     QString summary;
+    float temp;
 
 public:
     // Constructeurs
     Maintenance();
-    Maintenance(QString nomClient, QString etat, QString departement, QDate dateM, int nbPersonne, int nbJour, QString state, QString summary);
+    Maintenance(QString nomClient, QString etat, QString departement, QDate dateM, int nbPersonne, int nbJour, QString state, QString summary,float temp);
 
     // Getters
     int getId() const;
@@ -32,6 +33,7 @@ public:
     int getNbJour() const;
     QString getState() const;
     QString getSummary() const;
+    float getTemp() const;
 
     // Setters
     void setNomClient(const QString &value);
@@ -42,6 +44,7 @@ public:
     void setNbJour(int value);
     void setState(const QString &value);
     void setSummary(const QString &value);
+    void setTemp(float value);
 
     // Méthodes CRUD
     bool ajouter();

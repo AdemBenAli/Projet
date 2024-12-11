@@ -34,7 +34,8 @@ int mailer::sendEmail(Maintenance* m){
                            "Departement: %5\n\n"
                            "Nombre De Personnes: %6\n\n"
                            "Nombre De Jour: %7\n\n"
-                           "Summary: %8\n\n")
+                           "Summary: %8\n\n"
+                           "Temp: %9\n\n")
                        .arg(m->getNomClient())      // Assuming getter methods exist in the Maintenance class
                        .arg(m->getState())
                        .arg(m->getEtat())
@@ -42,7 +43,8 @@ int mailer::sendEmail(Maintenance* m){
                        .arg(m->getDepartement())
                        .arg(m->getNbPersonne())
                        .arg(m->getNbJour())
-                       .arg(m->getSummary());
+                       .arg(m->getSummary())
+                        .arg(m->getTemp());
                                                                                                                                                                                           "Rayen Bahri\n";
 
     // Create a TCP socket
